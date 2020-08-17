@@ -10,7 +10,7 @@ client = discord.Client()
 client = commands.Bot(command_prefix=prefix)
 client.remove_command('help')
 
-discordToken = "NzQzNTg0MTIxMTg3NDY3Mjc0.XzWyrQ.aWK04Fv4GDqwdhJIfq6S93ahz5M" #Copy your Discord Token here
+discordToken = "" #Copy your Discord Token here
 
 baseJSON = {"Player": []}
 
