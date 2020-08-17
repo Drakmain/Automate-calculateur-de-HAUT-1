@@ -5,7 +5,7 @@ from pathlib import Path
 from discord.ext import commands
 
 client = discord.Client()
-client = commands.Bot(command_prefix='') #You can custom your command prefix
+client = commands.Bot(command_prefix='?') #You can custom your command prefix
 client.remove_command('help')
 
 discordToken = "" #Copy your Discord Token here
