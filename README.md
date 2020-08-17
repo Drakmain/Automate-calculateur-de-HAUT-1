@@ -1,4 +1,4 @@
-# Automate calculateur de HAUT-1
+# Automate calculateur de HAUT 1
 
 Automate-calculateur-de-HAUT-1 is Discord Bot made with Discord.py.
 
