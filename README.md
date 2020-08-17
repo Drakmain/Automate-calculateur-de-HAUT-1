@@ -1,6 +1,7 @@
 # Automate-calculateur-de-HAUT-1
 
-Automate-calculateur-de-HAUT-1 is Discord Bot made with Discord.py
+Automate-calculateur-de-HAUT-1 is Discord Bot made with Discord.py.
+
 It's made to count number of TOP 1 in Fall Guys (Can work as a simple counter)
 
 ## Commands
