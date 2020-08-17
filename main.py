@@ -4,11 +4,13 @@ import numpy as np
 from pathlib import Path
 from discord.ext import commands
 
+prefix = '?' #You can custom the command prefix
+
 client = discord.Client()
-client = commands.Bot(command_prefix='?') #You can custom your command prefix
+client = commands.Bot(command_prefix=prefix)
 client.remove_command('help')
 
-discordToken = "" #Copy your Discord Token here
+discordToken = "NzQzNTg0MTIxMTg3NDY3Mjc0.XzWyrQ.aWK04Fv4GDqwdhJIfq6S93ahz5M" #Copy your Discord Token here
 
 baseJSON = {"Player": []}
 
@@ -33,7 +35,7 @@ async def on_ready():
 
 @client.command()
 async def help(ctx):
-    await ctx.send("Commandes disponible avec l'Automate calculateur de HAUT 1 :\n```?addPlayer @[Pseudo]``` Ajoute un joueur a la base de donnée\n```?leaderboard``` Te montre les plus gros BG de ce serveur\n```?add @[Pseudo]``` Ajoute un HAUT 1 au compteur du crack qui vient de gagner\n```?sub @[Pseudo]``` Enleve un HAUT 1\n```?nbHAUT @[Pseudo]``` Pour voir le nombre de HAUT 1")
+    await ctx.send(f"Commandes disponible avec l'Automate calculateur de HAUT 1 :\n```{prefix}addPlayer @[Pseudo]``` Ajoute un joueur a la base de donnée\n```{prefix}leaderboard``` Te montre les plus gros BG de ce serveur\n```{prefix}add @[Pseudo]``` Ajoute un HAUT 1 au compteur du crack qui vient de gagner\n```{prefix}sub @[Pseudo]``` Enleve un HAUT 1\n```{prefix}nbHAUT @[Pseudo]``` Pour voir le nombre de HAUT 1")
 
 @client.command()
 async def addPlayer(ctx, membre: discord.Member):
@@ -57,7 +59,7 @@ async def addPlayer(ctx, membre: discord.Member):
 @addPlayer.error
 async def on_command_error_addPlayer(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("Tu dois faire: ```?addPlayer @[Pseudo]```")
+        await ctx.send("Tu dois faire: ```{prefix}addPlayer @[Pseudo]```")
 
 @client.command()
 async def nbHAUT(ctx, membre: discord.Member):
@@ -69,47 +71,59 @@ async def nbHAUT(ctx, membre: discord.Member):
 @addPlayer.error
 async def on_command_error_nbHAUT(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("Tu dois faire: ```?nbHAUT @[Pseudo]```")
+        await ctx.send("Tu dois faire: ```{prefix}nbHAUT @[Pseudo]```")
 
 @client.command()
 async def sub(ctx, membre: discord.Member):
+    exisitingPlayer = False
 
     for idPlayer in HAUT_dict['Player']:
         if idPlayer['idDiscord'] == membre.id:
-            if (idPlayer['HAUT'] == 0):
-                await ctx.send(f"{membre.name} est déjà a 0 HAUT 1.")
-            else:
-                idPlayer['HAUT'] -= 1
-                await ctx.send(f"Un HAUT 1 a été élevé à {membre.name}. Il a donc {idPlayer['HAUT']} HAUT 1.")
+            exisitingPlayer = True
+            
+    if exisitingPlayer == True:
+        if (idPlayer['HAUT'] == 0):
+            await ctx.send(f"{membre.name} est déjà a 0 HAUT 1.")
+        else:
+            idPlayer['HAUT'] -= 1
+            await ctx.send(f"Un HAUT 1 a été élevé à {membre.name}. Il a donc {idPlayer['HAUT']} HAUT 1.")
 
-    with open(fileHAUT, "w") as write_file:
-        json.dump(HAUT_dict, write_file, indent = 2)
-    write_file.close()
+        with open(fileHAUT, "w") as write_file:
+            json.dump(HAUT_dict, write_file, indent = 2)
+        write_file.close()
+    else:
+        await ctx.send(f"{membre.name} n'est pas dans la base de donnée. Tu peux faire : ```{prefix}addPlayer @[Pseudo]``` pour l'ajouter")
 
 @sub.error
 async def on_command_error_sub(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("Tu dois faire: ```?sub @[Pseudo]```")
+        await ctx.send(f"Tu dois faire: ```{prefix}sub @[Pseudo]```")
 
 @client.command()
 async def add(ctx, membre: discord.Member):
+    exisitingPlayer = False
 
     for idPlayer in HAUT_dict['Player']:
         if idPlayer['idDiscord'] == membre.id:
-            idPlayer['HAUT'] += 1
-            if idPlayer['HAUT'] == 1:
-                await ctx.send(f"{membre.name} n'avait aucun HAUT 1. BJ pour ton premier HAUT 1 <:couronne:{emoteCouronne}>.")
-            else:
-                await ctx.send(f"{membre.name} BJ pour ton {idPlayer['HAUT']} HAUT 1 <:couronne:{emoteCouronne}>.")
-            
-    with open(fileHAUT, "w") as write_file:
-        json.dump(HAUT_dict, write_file, indent = 2)
-    write_file.close()
+            exisitingPlayer = True
+
+    if exisitingPlayer == True:
+        idPlayer['HAUT'] += 1
+        if idPlayer['HAUT'] == 1:
+            await ctx.send(f"{membre.name} n'avait aucun HAUT 1. BJ pour ton premier HAUT 1 <:couronne:{emoteCouronne}>.")
+        else:
+            await ctx.send(f"{membre.name} BJ pour ton {idPlayer['HAUT']} HAUT 1 <:couronne:{emoteCouronne}>.")
+
+        with open(fileHAUT, "w") as write_file:
+            json.dump(HAUT_dict, write_file, indent = 2)
+        write_file.close()
+    else:
+        await ctx.send(f"{membre.name} n'est pas dans la base de donnée. Tu peux faire : ```{prefix}addPlayer @[Pseudo]``` pour l'ajouter")
 
 @add.error
 async def on_command_error_add(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("Tu dois faire : ```?add @[Pseudo]```d")
+        await ctx.send(f"Tu dois faire : ```{prefix}add @[Pseudo]```d")
 
 @client.command()
 async def leaderboard(ctx):
@@ -117,7 +131,7 @@ async def leaderboard(ctx):
     nbPlayer = len(HAUT_dict['Player'])
 
     if(nbPlayer == 0):
-        await ctx.send("Aucun joeur dans la base de donnée, vous pouvez faire ```?addPlayer @[Pseudo]``` pour en ajouter")
+        await ctx.send(f"Aucun joeur dans la base de donnée, vous pouvez faire : ```{prefix}addPlayer @[Pseudo]``` pour en ajouter")
     else: 
         classement = np.zeros((2, nbPlayer), dtype=np.int64)
 
