@@ -26,7 +26,7 @@ with open(fileHAUT, "r") as read_file:
         HAUT_dict = json.load(read_file)
         read_file.close()
 
-emoteCouronne = 743800687749627936 
+emoteCouronne = 743800687749627936
 
 @client.event
 async def on_ready():
@@ -49,7 +49,7 @@ async def addPlayer(ctx, membre: discord.Member):
         await ctx.send(f"{membre.name} a déjà etait ajouté à la base de donnée")
     else:
         HAUT_dict['Player'].append({"Name": membre.name,"idDiscord": membre.id,"HAUT": 0})
-    
+
         await ctx.send(f"{membre.name} a été ajouté a la base de donnée des BG qui joue a TOMBER MEC")
 
         with open(fileHAUT, "w") as write_file:
@@ -80,7 +80,7 @@ async def sub(ctx, membre: discord.Member):
     for idPlayer in HAUT_dict['Player']:
         if idPlayer['idDiscord'] == membre.id:
             exisitingPlayer = True
-            
+
     if exisitingPlayer == True:
         if (idPlayer['HAUT'] == 0):
             await ctx.send(f"{membre.name} est déjà a 0 HAUT 1.")
@@ -132,7 +132,7 @@ async def leaderboard(ctx):
 
     if(nbPlayer == 0):
         await ctx.send(f"Aucun joeur dans la base de donnée, vous pouvez faire : ```{prefix}addPlayer @[Pseudo]``` pour en ajouter")
-    else: 
+    else:
         classement = np.zeros((2, nbPlayer), dtype=np.int64)
 
         x = 0
@@ -141,18 +141,18 @@ async def leaderboard(ctx):
             classement[1][x] = o['HAUT']
             x += 1
 
-        for i in range(len(classement[0])): 
-            k = classement[1][i] 
-            h = classement[0][i] 
+        for i in range(len(classement[0])):
+            k = classement[1][i]
+            h = classement[0][i]
             j = i-1
-            while j >= 0 and k < classement[1][j] : 
+            while j >= 0 and k < classement[1][j] :
                     classement[1][j + 1] = classement[1][j]
                     classement[0][j + 1] = classement[0][j]
                     j -= 1
             classement[1][j + 1] = k
             classement[0][j + 1] = h
 
-        classementComp = "Voici ceux avec LA MEILLEUR DNA DU SERVEUR :\n" 
+        classementComp = "Voici ceux avec LA MEILLEUR DNA DU SERVEUR :\n"
 
         HAUTMOINS1 = 0
         x = 1
@@ -164,7 +164,7 @@ async def leaderboard(ctx):
                         HAUTMOINS1 = classement[1][u]
                     else:
                         x += 1
-                
+
         await ctx.send(f"{classementComp}")
 
 client.run(discordToken)
