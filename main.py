@@ -44,6 +44,7 @@ async def addPlayer(ctx, membre: discord.Member):
     for idPlayer in HAUT_dict['Player']:
         if idPlayer['idDiscord'] == membre.id:
             exisitingPlayer = True
+            break
 
     if exisitingPlayer == True:
         await ctx.send(f"{membre.name} a déjà etait ajouté à la base de donnée")
@@ -80,13 +81,14 @@ async def sub(ctx, membre: discord.Member):
     for idPlayer in HAUT_dict['Player']:
         if idPlayer['idDiscord'] == membre.id:
             exisitingPlayer = True
+            break
 
     if exisitingPlayer == True:
         if (idPlayer['HAUT'] == 0):
             await ctx.send(f"{membre.name} est déjà a 0 HAUT 1.")
         else:
             idPlayer['HAUT'] -= 1
-            await ctx.send(f"Un HAUT 1 a été élevé à {membre.name}. Il a donc {idPlayer['HAUT']} HAUT 1.")
+            await ctx.send(f"Un HAUT 1 a été élevé à {membre.name}. Il as donc {idPlayer['HAUT']} HAUT 1.")
 
         with open(fileHAUT, "w") as write_file:
             json.dump(HAUT_dict, write_file, indent = 2)
@@ -106,6 +108,7 @@ async def add(ctx, membre: discord.Member):
     for idPlayer in HAUT_dict['Player']:
         if idPlayer['idDiscord'] == membre.id:
             exisitingPlayer = True
+            break
 
     if exisitingPlayer == True:
         idPlayer['HAUT'] += 1
